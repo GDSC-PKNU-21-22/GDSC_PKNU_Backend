@@ -25,6 +25,7 @@ bin/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+/src/main/java/resources/application.yml
 
 ### NetBeans ###
 /nbproject/private/
@@ -36,4 +37,3 @@ out/
 ### VS Code ###
 .vscode/
 src/main/resources/application.yml
-/src/main/java/resources/
