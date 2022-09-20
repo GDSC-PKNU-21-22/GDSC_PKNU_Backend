@@ -71,7 +71,7 @@ public class NotionApiTest {
     }
 
     @Test
-    void getPlainTexts(){
+    void getPlainTexts() {
         //given
         String name = "가나다";
         String role = "Core";
