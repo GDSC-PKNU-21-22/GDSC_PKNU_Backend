@@ -46,10 +46,12 @@ public class MemberService {
         extractName(resultInString);
         extractEmail(resultInString);
         extractRole(resultInString);
-        addMember();
+        addMembers();
+        sortMembers();
 
         return members;
     }
+
 
     private void getMemberIntroPage() {
         memberIntroPage = client.getDatabases().queryDatabase(
@@ -84,14 +86,41 @@ public class MemberService {
         }
     }
 
-    private void addMember() {
+    private void addMembers() {
         for (int i = 0; i < nameList.size(); i++) {
             Member member = Member.builder()
                     .name(nameList.get(i))
-                    .email(emailList.get(i))
                     .role(roleList.get(i))
+                    .email(emailList.get(i))
                     .build();
             members.add(member);
         }
     }
+
+    private void sortMembers() {
+//        members를 Lead, Core Member, Member, Senior 순으로 정렬
+        members.sort((o1, o2) -> {
+            if (o1.getRole().equals("Lead")) {
+                return -1;
+            } else if (o2.getRole().equals("Lead")) {
+                return 1;
+            } else if (o1.getRole().equals("Core Member")) {
+                return -1;
+            } else if (o2.getRole().equals("Core Member")) {
+                return 1;
+            } else if (o1.getRole().equals("Member")) {
+                return -1;
+            } else if (o2.getRole().equals("Member")) {
+                return 1;
+            } else if (o1.getRole().equals("Senior")) {
+                return -1;
+            } else if (o2.getRole().equals("Senior")) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+
+    }
+
 }
