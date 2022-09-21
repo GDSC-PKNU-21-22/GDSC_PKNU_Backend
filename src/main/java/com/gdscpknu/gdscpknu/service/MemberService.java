@@ -28,7 +28,7 @@ public class MemberService {
     @Autowired
     public MemberService(GdscNotion gdscNotion) {
         this.gdscNotion = gdscNotion;
-        client = gdscNotion.getClient();
+        client = gdscNotion.initClient();
     }
 
     public List<Member> getAllMember() {
