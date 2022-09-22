@@ -6,13 +6,12 @@ import lombok.Getter;
 @Getter
 public class Member {
     private String name;
-    private String email;
     private String role;
-
+    private String email;
     @Builder
-    public Member(String name, String email, String role) {
+    public Member(String name, String role, String email) {
         this.name = name;
-        this.email = email;
         this.role = role;
+        this.email = email;
     }
 }

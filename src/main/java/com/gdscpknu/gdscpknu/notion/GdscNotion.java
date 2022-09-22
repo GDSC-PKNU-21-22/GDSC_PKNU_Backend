@@ -11,15 +11,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class GdscNotion {
 
-    @Value("${testNotion.introduce.token}")
+    @Value("${gdscNotion.introduce.token}")
     private String TOKEN;
-    @Value("${testNotion.introduce.databaseId}")
+    @Value("${gdscNotion.introduce.databaseId}")
     private String DATABASE_ID;
-    private final BlockingNotionClient client;
-
-    public GdscNotion(BlockingNotionClient client) {
-        this.client = initClient();
-    }
 
     public BlockingNotionClient initClient() {
         NotionClient notionClient = NotionClient.newInstance(
@@ -28,10 +23,6 @@ public class GdscNotion {
                 )
         );
         return BlockingNotionClientUtils.asBlockingNotionClient(notionClient);
-    }
-
-    public BlockingNotionClient getClient() {
-        return client;
     }
 
     public String getTOKEN() {

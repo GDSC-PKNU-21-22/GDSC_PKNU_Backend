@@ -8,8 +8,8 @@ public class NotionTable {
 
     private final String TOKEN = "";
     private final String DATABASE_ID = "";
-    private final String tableName = "MEMBER PROFILE";
-    private final int memberNum = 3;
+    private final String tableName = "멤버 소개";
+    private final int memberNum = 39;
 
     public BlockingNotionClient initClient() {
         NotionClient notionClient = NotionClient.newInstance(

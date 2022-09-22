@@ -8,6 +8,7 @@ import org.jraf.klibnotion.model.database.query.filter.DatabaseQueryPropertyFilt
 import org.jraf.klibnotion.model.page.Page;
 import org.jraf.klibnotion.model.pagination.Pagination;
 import org.jraf.klibnotion.model.pagination.ResultPage;
+import org.jraf.klibnotion.model.property.sort.PropertySort;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -36,7 +37,6 @@ public class NotionApiTest {
         );
 
         //then
-//        System.out.println("simpleQueryResultPage = " + simpleQueryResultPage.results);
         assertThat(database.getTitle().getPlainText()).isEqualTo(notionTable.getTableName());
         assertThat(simpleQueryResultPage.results.size()).isEqualTo(notionTable.getMemberNum());
     }
@@ -44,9 +44,9 @@ public class NotionApiTest {
     @Test
     public void getRowByEmail() {
         //given
-        String name = "가나다";
-        String role = "Core";
-        String email = "ganada@pukyong.ac.kr";
+        String name = "남우진";
+        String role = "Lead";
+        String email = "mokujin94@gmail.com";
 
         //when
         ResultPage<Page> simpleQueryResultPage = client.getDatabases().queryDatabase(
@@ -73,14 +73,16 @@ public class NotionApiTest {
     @Test
     void getPlainTexts() {
         //given
-        String name = "가나다";
-        String role = "Core";
-        String email = "ganada@pukyong.ac.kr";
+        String name = "남우진";
+        String role = "Lead";
+        String email = "mokujin94@gmail.com";
+
+        // "역할" 기준으로 정렬
 
         ResultPage<Page> simpleQueryResultPage = client.getDatabases().queryDatabase(
                 notionTable.getDATABASE_ID(),
                 null,
-                null,
+                new PropertySort().ascending("역할"),
                 new Pagination()
         );
 
@@ -89,7 +91,9 @@ public class NotionApiTest {
          * KlibNotion 라이브러리에서 name, email, role 값을 정규식으로 추출하였음
          */
         String resultInString = simpleQueryResultPage.results.toString();
-        List<String> plainTextList = new ArrayList<>();
+        List<String> names = new ArrayList<>();
+        List<String> roles = new ArrayList<>();
+        List<String> emails = new ArrayList<>();
         // 문자열 중 "(plainText=" ~ "," 범위(이름, 이메일) OR " "name=" ~ "," 범위(역할) 문자열을 추출
         Pattern namePattern = Pattern.compile("(?<=\\(plainText=)(.*?)(?=,)");
         Pattern emailPattern = Pattern.compile("(?<=\\bname=이메일, value=)(.*?)(?=\\))");
@@ -98,20 +102,23 @@ public class NotionApiTest {
         Matcher emailMatcher = emailPattern.matcher(resultInString);
         Matcher roleMatcher = rolePattern.matcher(resultInString);
         while (nameMatcher.find()) {
-            plainTextList.add(nameMatcher.group());
-        }
-        while (emailMatcher.find()) {
-            plainTextList.add(emailMatcher.group());
+            names.add(nameMatcher.group());
         }
         while (roleMatcher.find()) {
-            plainTextList.add(roleMatcher.group());
+            roles.add(roleMatcher.group());
+        }
+        while (emailMatcher.find()) {
+            emails.add(emailMatcher.group());
         }
 
+
         //then
-        assertThat(plainTextList.size()).isEqualTo(notionTable.getMemberNum() * 3);
-        assertThat(plainTextList.get(0)).isEqualTo(name);
-        assertThat(plainTextList.get(3)).isEqualTo(email);
-        assertThat(plainTextList.get(6)).isEqualTo(role);
+        assertThat(names.size()).isEqualTo(notionTable.getMemberNum());
+        assertThat(roles.size()).isEqualTo(notionTable.getMemberNum());
+        assertThat(emails.size()).isEqualTo(notionTable.getMemberNum());
+        assertThat(names.get(0)).isEqualTo(name);
+        assertThat(roles.get(0)).isEqualTo(role);
+        assertThat(emails.get(0)).isEqualTo(email);
     }
 
 }
